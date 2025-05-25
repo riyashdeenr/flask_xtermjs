@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flask xterm.js Terminal</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='xterm.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
     <style>
         #terminal {
             width: 100%;
@@ -15,7 +15,8 @@
 </head>
 <body>
     <div id="terminal"></div>
-    <script src="{{ url_for('static', filename='xterm.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
     <script>
         const terminal = new Terminal();
         const socket = new WebSocket('ws://' + window.location.host + '/terminal');
