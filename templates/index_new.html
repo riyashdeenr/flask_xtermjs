@@ -1,0 +1,20 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
+</head>
+<body>
+  <div id="terminal"></div>
+  <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
+  <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+  <script>
+    const term = new Terminal();
+    term.open(document.getElementById('terminal'));
+    const socket = io();
+
+    term.onData(data => socket.emit('app_input', {input: data}));
+    socket.on('app_output', msg => term.write(msg.output));
+  </script>
+</body>
+</html>
