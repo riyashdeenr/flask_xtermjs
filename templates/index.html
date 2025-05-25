@@ -4,36 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flask xterm.js Terminal</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
-    <style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='xterm.css') }}">
+    <!-- <style>
         #terminal {
             width: 100%;
             height: 100vh;
             border: 1px solid black;
         }
-    </style>
+    </style> -->
 </head>
 <body>
     <div id="terminal"></div>
     <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
     <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
     <script>
-        const terminal = new Terminal();
-        const socket = new WebSocket('ws://' + window.location.host + '/terminal');
+        const term = new Terminal();
+        term.open(document.getElementById('terminal'));
 
-        terminal.open(document.getElementById('terminal'));
+        const socket = io();
 
-        socket.onmessage = function(event) {
-            terminal.write(event.data);
-        };
-
-        terminal.onData(function(data) {
-            socket.send(data);
+        // Display output from backend
+        socket.on('app_output', function(data) {
+            term.write(data.output);
         });
 
-        socket.onclose = function() {
-            terminal.write('\r\nConnection closed.\r\n');
-        };
+        // Buffer input and send only on ENTER
+        let inputBuffer = '';
+        term.onData(function(data) {
+            if (data === '\r') {
+                term.write('\r\n');
+                socket.emit('app_input', { input: inputBuffer });
+                inputBuffer = '';
+            } else if (data === '\u007F') { // Backspace
+                if (inputBuffer.length > 0) {
+                    term.write('\b \b');
+                    inputBuffer = inputBuffer.slice(0, -1);
+                }
+            } else {
+                term.write(data);
+                inputBuffer += data;
+            }
+        });
     </script>
 </body>
 </html>
