@@ -7,7 +7,7 @@ app.config['SECRET_KEY'] = 'your_secret_key'
 socketio = SocketIO(app)
 
 # Replace with your CLI command (e.g., "python my_cli_app.py")
-CLI_COMMAND = ["./your_cli_app"]
+CLI_COMMAND = ["python", "calculator.py"]
 
 @app.route('/')
 def index():
