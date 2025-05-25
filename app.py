@@ -2,14 +2,14 @@ from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
 import subprocess
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key'
-socketio = SocketIO(app)
+application = Flask(__name__)
+application.config['SECRET_KEY'] = 'your_secret_key'
+socketio = SocketIO(application)
 
 # Replace with your CLI command (e.g., "python my_cli_app.py")
 CLI_COMMAND = ["python", "calculator.py"]
 
-@app.route('/')
+@application.route('/')
 def index():
     return render_template('index.html')
 
@@ -52,5 +52,4 @@ def connect():
     socketio.start_background_task(read_process_output, process)
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
-    app.run()
+    socketio.run(application, debug=True)
