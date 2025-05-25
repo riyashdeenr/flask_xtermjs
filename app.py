@@ -6,7 +6,7 @@ application = Flask(__name__)
 application.config['SECRET_KEY'] = 'your_secret_key'
 socketio = SocketIO(application)
 
-# Replace with your CLI command (e.g., "python my_cli_app.py")
+# Replace with your CLI command (e.g., "python", "my_cli_app.py")
 CLI_COMMAND = ["python", "calculator.py"]
 
 @application.route('/')
